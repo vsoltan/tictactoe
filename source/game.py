@@ -4,7 +4,7 @@ import random as r
 
 import numpy as np
 
-# version 1.2
+# version 1.3
 # author vsoltan
 
 """"framework for a basic tic tac toe game"""
@@ -39,9 +39,8 @@ class tic_tac_Game:
 
         self.num_turns = 0
 
-    """checks whether the game is complete, win or draw"""
-
     def game_over(self, playerToken):
+        """checks whether the game is complete, win or draw"""
 
         # not possible to lose without taking at least 5 turns (3 x 3), 7 (4 x 4) etc
         if self.num_turns < 2 * self.size - 1:
@@ -60,9 +59,8 @@ class tic_tac_Game:
 
         return False
 
-    """game logic, alternating players choosing a space on the board to fill with their respective token"""
-
     def play_game(self, player):
+        """game logic, alternating players choosing spaces on the board to fill with their respective tokens"""
 
         is_over = False
 
@@ -98,8 +96,7 @@ class tic_tac_Game:
         else:
             print(self.player_dict[-1 * self.curr_turn] + " wins!")
 
-    """board functions"""
-
+    # board functions
     def print_board(self):
         print(self.board)
 
@@ -137,6 +134,6 @@ class tic_tac_Game:
         return False
 
 
-game = tic_tac_Game(3)
-game.print_board()
-game.play_game(game.curr_turn)
+# game = tic_tac_Game(3)
+# game.print_board()
+# game.play_game(game.curr_turn)
