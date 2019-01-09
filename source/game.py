@@ -3,7 +3,6 @@
 import random as r
 
 import numpy as np
-import pip._vendor.distlib.compat #cleanup this import?
 
 # version 1.2
 # author vsoltan
@@ -48,7 +47,7 @@ class tic_tac_Game:
         if self.num_turns < 2 * self.size - 1:
             return False
 
-        if self.check_columns(self.board, playerToken) is True: # can maybe write in a more pythonian way?
+        if self.check_columns(self.board, playerToken) is True:  # can maybe write in a more pythonian way?
             return True
 
         temp_board = np.transpose(self.board)
@@ -70,10 +69,15 @@ class tic_tac_Game:
         while not is_over and self.num_turns != self.size ** 2:
             token = self.token_dict[self.curr_turn]
 
-            # user choice
-            # NEED TO ADD user input error handling (not adding to an already full space)
-            move_row, move_col = map(int, pip._vendor.distlib.compat.raw_input(
-                self.player_dict[self.curr_turn] + " make your move: input row and column").split())
+            # user input validation: can't select the same space twice
+            while True:
+                move_row, move_col = map(int, input(self.player_dict[self.curr_turn] +
+                                                    " make your move: input row and column").split())
+
+                if self.board[move_row][move_col] == '':
+                    break
+                else:
+                    print("index is full, choose another space")
 
             # updating the visual representation of the board
             self.board[move_row][move_col] = token
@@ -136,5 +140,3 @@ class tic_tac_Game:
 game = tic_tac_Game(3)
 game.print_board()
 game.play_game(game.curr_turn)
-# game.board = [['X', 'X', 'O'], ['O', 'O', 'X'], ['O', '', '']]
-# print(game.check_diagonals('O'))
