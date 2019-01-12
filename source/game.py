@@ -37,6 +37,8 @@ class tic_tac_Game:
 
         self.player_dict = {-1: "player1", 1: "player2"}
 
+        self.score = {-1: 0, 1: 0}
+
         self.num_turns = 0
 
     def game_over(self, playerToken):
@@ -61,6 +63,8 @@ class tic_tac_Game:
 
     def play_game(self, player):
         """game logic, alternating players choosing spaces on the board to fill with their respective tokens"""
+
+        self.print_board()
 
         is_over = False
 
@@ -95,6 +99,19 @@ class tic_tac_Game:
             print("game is a draw!")
         else:
             print(self.player_dict[-1 * self.curr_turn] + " wins!")
+            self.score[-1 * self.curr_turn] += 1
+
+        # play again?
+        cont = input("play again (y/n)?")
+
+        # temp user validation (could be another character)
+        if cont == 'y':
+            is_over = False
+            self.board = np.empty(shape=(self.size, self.size), dtype=str)
+            # player that just lost gets first turn
+            self.play_game(self.curr_turn)
+        else:
+            return
 
     # board functions
     def print_board(self):
@@ -134,6 +151,5 @@ class tic_tac_Game:
         return False
 
 
-# game = tic_tac_Game(3)
-# game.print_board()
-# game.play_game(game.curr_turn)
+game = tic_tac_Game(3)
+game.play_game(game.curr_turn)
