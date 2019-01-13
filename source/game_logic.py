@@ -4,17 +4,18 @@ import random as r
 
 import numpy as np
 
-from gfx import initBoard
+from graphics_board import graphics_board
 
-# version 1.3
+
+# version 1.4
 # author vsoltan
 
 """"framework for a basic tic tac toe game"""
 
 
-class tic_tac_Game:
+class tic_tac_game:
 
-    def __init__(self, boardSize):
+    def __init__(self, boardSize=3):
         """
         :rtype: object
         :arg: size of the desired board, number
@@ -24,12 +25,11 @@ class tic_tac_Game:
         assigns player order and their associated tokens
 
         """
-        if boardSize is None:
-            self.size = 3
-        else:
-            self.size = boardSize
+        self.size = boardSize
 
         self.board = np.empty(shape=(self.size, self.size), dtype=str)
+
+        self.visual_board = graphics_board(self.size)
 
         # randomly selects the first player, player0 and player1
         self.curr_turn = r.choice([-1, 1])
@@ -37,33 +37,35 @@ class tic_tac_Game:
         # token assignments: player1 -> X, player2 -> O
         self.token_dict = {-1: "X", 1: "O"}
 
+        self.image_dict = {-1: "placeholder1.gif", 1: "placeholder1.gif"}
+
         self.player_dict = {-1: "player1", 1: "player2"}
 
         self.score = {-1: 0, 1: 0}
 
         self.num_turns = 0
 
-    def game_over(self, playerToken):
+    def game_over(self):
         """checks whether the game is complete, win or draw"""
 
         # not possible to lose without taking at least 5 turns (3 x 3), 7 (4 x 4) etc
         if self.num_turns < 2 * self.size - 1:
             return False
 
-        if self.check_columns(self.board, playerToken) is True:  # can maybe write in a more pythonian way?
+        if self.check_columns() is True:  # can maybe write in a more pythonian way?
             return True
 
         temp_board = np.transpose(self.board)
 
-        if self.check_columns(temp_board, playerToken) is True:
+        if self.check_columns() is True:
             return True
 
-        if self.check_diagonals(playerToken) is True:
+        if self.check_diagonals() is True:
             return True
 
         return False
 
-    def play_game(self, player):
+    def play_game(self):
         """game logic, alternating players choosing spaces on the board to fill with their respective tokens"""
 
         self.print_board()
@@ -75,8 +77,16 @@ class tic_tac_Game:
 
             # user input validation: can't select the same space twice
             while True:
-                move_row, move_col = map(int, input(self.player_dict[self.curr_turn] +
-                                                    " make your move: input row and column").split())
+
+                print("Make your move!")
+                click_point = self.visual_board.win.getMouse()
+                lims = self.visual_board.limits
+                move_row = self.visual_board.from_point_to_index(lims, click_point.getX(), 0, len(lims))
+                move_col = self.visual_board.from_point_to_index(lims, click_point.getY(), 0, len(lims))
+
+                # move_row, move_col = map(int, input(self.player_dict[self.curr_turn] +
+                #                                     " make your move: input row and column").split())
+
 
                 if self.board[move_row][move_col] == '':
                     break
@@ -89,7 +99,7 @@ class tic_tac_Game:
             # increase the number of tokens
             self.num_turns += 1
 
-            is_over = self.game_over(token)
+            is_over = self.game_over()
 
             # alternate users
             self.curr_turn = -1 * self.curr_turn
@@ -111,7 +121,7 @@ class tic_tac_Game:
             is_over = False
             self.board = np.empty(shape=(self.size, self.size), dtype=str)
             # player that just lost gets first turn
-            self.play_game(self.curr_turn)
+            self.play_game()
         else:
             return
 
@@ -119,17 +129,17 @@ class tic_tac_Game:
     def print_board(self):
         print(self.board)
 
-    def check_columns(self, board, token):
+    def check_columns(self):
         for i in range(0, self.size):
             consecutive_tokens = 0
             for j in range(0, self.size):
-                if board[i][j] == token:
+                if self.board[i][j] == self.token_dict[self.curr_turn]:
                     consecutive_tokens += 1
             if consecutive_tokens == self.size:
                 return True
         return False
 
-    def check_diagonals(self, token):
+    def check_diagonals(self):
         diag = np.diag(self.board)
         other_diag = np.diag(np.fliplr(self.board))
 
@@ -152,6 +162,6 @@ class tic_tac_Game:
                 return True
         return False
 
-
-# game = tic_tac_Game(3)
-# game.play_game(game.curr_turn)
+if __name__ == "__main__":
+    game = tic_tac_game()
+    game.play_game()
