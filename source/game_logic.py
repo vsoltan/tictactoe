@@ -4,6 +4,8 @@ import random as r
 
 import numpy as np
 
+from gfx import initBoard
+
 # version 1.3
 # author vsoltan
 
@@ -151,5 +153,5 @@ class tic_tac_Game:
         return False
 
 
-game = tic_tac_Game(3)
-game.play_game(game.curr_turn)
+# game = tic_tac_Game(3)
+# game.play_game(game.curr_turn)

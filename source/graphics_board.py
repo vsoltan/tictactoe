@@ -3,7 +3,7 @@ from graphics import *
 from game import tic_tac_Game
 
 
-def main():
+def initBoard():
     # before
 
     win = GraphWin("Tic Tac Toe", 500, 500)
@@ -25,10 +25,6 @@ def main():
         horizontal_bound.draw(win)
         vertical_bound.draw(win)
 
-    
-
-
-
 
     # message = Text(Point(250, 250), "Hello!")
     # message.setTextColor("white")
@@ -40,4 +36,4 @@ def main():
     win.close()  # Close window when done
 
 
-main()
+initBoard()
