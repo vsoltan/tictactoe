@@ -54,10 +54,9 @@ class tic_tac_game:
         if self.check_columns() is True:  # can maybe write in a more pythonian way?
             return True
 
-        temp_board = np.transpose(self.board)
-
-        if self.check_columns() is True:
+        if self.check_rows() is True:
             return True
+
 
         if self.check_diagonals() is True:
             return True
@@ -75,16 +74,16 @@ class tic_tac_game:
             # user input validation: can't select the same space twice
             while True:
 
-                # print("Make your move!")
-                # click_point = self.visual_board.win.getMouse()
-                # lims = self.visual_board.limits
-                #
-                # move_col = self.visual_board.from_point_to_index(lims, click_point.getX())
-                #
-                # move_row = self.visual_board.from_point_to_index(lims, click_point.getY())
+                print("Make your move!")
+                click_point = self.visual_board.win.getMouse()
+                lims = self.visual_board.limits
 
-                move_row, move_col = map(int, input(self.player_dict[self.curr_turn] +
-                                                    " make your move: input row and column").split())
+                move_col = self.visual_board.from_point_to_index(lims, click_point.getX())
+
+                move_row = self.visual_board.from_point_to_index(lims, click_point.getY())
+
+                # move_row, move_col = map(int, input(self.player_dict[self.curr_turn] +
+                #                                     " make your move: input row and column").split())
 
                 if self.board[move_row][move_col] == '':
                     break
@@ -127,19 +126,25 @@ class tic_tac_game:
     def print_board(self):
         print(self.board)
 
-    def check_columns(self):
-        for i in range(0, self.size):
-            consecutive_tokens = 0
-            for j in range(0, self.size):
-                if self.board[i][j] == self.token_dict[self.curr_turn]:
-                    print('i: ', i)
-                    print('j: ', j)
-                    consecutive_tokens = consecutive_tokens + 1
-                    print(consecutive_tokens)
+    def check_rows(self):
+            for i in range(0, self.size):
+                consecutive_tokens = 0
+                for j in range(0, self.size):
+                    if self.board[i][j] == self.token_dict[self.curr_turn]:
+                        consecutive_tokens += 1
+                if consecutive_tokens == self.size:
+                    return True
+            return False
 
-            if consecutive_tokens == self.size:
-                return True
-        return False
+    def check_columns(self):
+            for i in range(0, self.size):
+                consecutive_tokens = 0
+                for j in range(0, self.size):
+                    if self.board[j][i] == self.token_dict[self.curr_turn]:
+                        consecutive_tokens += 1
+                if consecutive_tokens == self.size:
+                    return True
+            return False
 
     def check_diagonals(self):
         diag = np.diag(self.board)
@@ -167,4 +172,4 @@ class tic_tac_game:
 
 if __name__ == "__main__":
     game = tic_tac_game()
-    game.play_game()
+
