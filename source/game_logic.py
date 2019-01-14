@@ -3,6 +3,7 @@
 import random as r
 
 import numpy as np
+from graphics import Point, Image, Text
 
 from graphics_board import graphics_board
 
@@ -36,7 +37,7 @@ class tic_tac_game:
         # token assignments: player1 -> X, player2 -> O
         self.token_dict = {-1: "X", 1: "O"}
 
-        self.image_dict = {-1: "placeholder1.gif", 1: "placeholder1.gif"}
+        self.image_dict = {-1: "tokenx.png", 1: "placeholder1.gif"}
 
         self.player_dict = {-1: "player1", 1: "player2"}
 
@@ -90,8 +91,14 @@ class tic_tac_game:
                 else:
                     print("index is full, choose another space")
 
-            # updating the visual representation of the board
+            # updating the logical representation of the board
             self.board[move_row][move_col] = token
+
+            # visual update
+            token_player = Text(Point(self.visual_board.limits[move_col] - (500/6), self.visual_board.limits[move_row] - (500/6)), self.token_dict[self.curr_turn])
+            token_player.setFill('white')
+            # token_player = Image(Point(83.33333, 83.33333), "tokenx.png")
+            token_player.draw(self.visual_board.win)
 
             # increase the number of tokens
             self.num_turns += 1
