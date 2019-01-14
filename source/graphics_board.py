@@ -44,32 +44,20 @@ class graphics_board:
             horizontal_bound.draw(self.win)
             vertical_bound.draw(self.win)
 
-        self.win.getMouse()  # Pause to view result
+    def from_point_to_index(self, collection, coordinate):
 
-    def from_point_to_index(self, collection, coordinate, lower, upper):
-        """
-        :param collection: the list of limits
-        :param coordinate: x or y value passed from mouse click
-        :param lower, upper: bounds used for a variation of binary search
-        :return: if the coordinate is out of range, returns -1, else,
-            returns the corresponding index in the matrix
-        """
-        if coordinate <= collection[0] or coordinate >= collection[len(collection) - 1]:
-            return -1;
+        if coordinate >= collection[len(collection) - 1]:
+            return -1
 
-        while lower <= upper:
-            middle = (lower + upper) // 2;
-            value = collection[middle];
-            if value > coordinate > collection[middle - 1]:
-                return middle;
-            elif coordinate < value:
-                upper = middle - 1;
-            else:
-                lower = middle + 1;
+        i = 0
 
-    # def updateBoard(self, array, x, y):
-    #     # x and y are retrieved from mouse clicks
-    #     return
+        while i < len(collection) and coordinate > collection[i]:
+            print(coordinate)
+            print(collection[0])
+            i += 1
+        return i
 
 
-
+if __name__ == "__main__":
+    game = graphics_board(3)
+    print(game.from_point_to_index(game.limits, 500))

@@ -5,7 +5,8 @@ from graphics_board import graphics_board
 
 
 def run(size):
-    visual = graphics_board(3, tic_tac_game())
+    game = tic_tac_game()
+    game.play_game()
 
 
-# run(3)
+run(3)

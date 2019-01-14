@@ -6,7 +6,6 @@ import numpy as np
 
 from graphics_board import graphics_board
 
-
 # version 1.4
 # author vsoltan
 
@@ -68,8 +67,6 @@ class tic_tac_game:
     def play_game(self):
         """game logic, alternating players choosing spaces on the board to fill with their respective tokens"""
 
-        self.print_board()
-
         is_over = False
 
         while not is_over and self.num_turns != self.size ** 2:
@@ -78,15 +75,16 @@ class tic_tac_game:
             # user input validation: can't select the same space twice
             while True:
 
-                print("Make your move!")
-                click_point = self.visual_board.win.getMouse()
-                lims = self.visual_board.limits
-                move_row = self.visual_board.from_point_to_index(lims, click_point.getX(), 0, len(lims))
-                move_col = self.visual_board.from_point_to_index(lims, click_point.getY(), 0, len(lims))
+                # print("Make your move!")
+                # click_point = self.visual_board.win.getMouse()
+                # lims = self.visual_board.limits
+                #
+                # move_col = self.visual_board.from_point_to_index(lims, click_point.getX())
+                #
+                # move_row = self.visual_board.from_point_to_index(lims, click_point.getY())
 
-                # move_row, move_col = map(int, input(self.player_dict[self.curr_turn] +
-                #                                     " make your move: input row and column").split())
-
+                move_row, move_col = map(int, input(self.player_dict[self.curr_turn] +
+                                                    " make your move: input row and column").split())
 
                 if self.board[move_row][move_col] == '':
                     break
@@ -134,7 +132,11 @@ class tic_tac_game:
             consecutive_tokens = 0
             for j in range(0, self.size):
                 if self.board[i][j] == self.token_dict[self.curr_turn]:
-                    consecutive_tokens += 1
+                    print('i: ', i)
+                    print('j: ', j)
+                    consecutive_tokens = consecutive_tokens + 1
+                    print(consecutive_tokens)
+
             if consecutive_tokens == self.size:
                 return True
         return False
@@ -161,6 +163,7 @@ class tic_tac_game:
             if consecutive_tokens == self.size:
                 return True
         return False
+
 
 if __name__ == "__main__":
     game = tic_tac_game()
