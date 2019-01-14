@@ -44,7 +44,14 @@ class graphics_board:
             horizontal_bound.draw(self.win)
             vertical_bound.draw(self.win)
 
-    def from_point_to_index(self, collection, coordinate):
+        self.tokensDrawn = []
+
+    def undraw_all(self):
+        for token in self.tokensDrawn:
+            token.undraw()
+
+    @staticmethod
+    def from_point_to_index(collection, coordinate):
 
         if coordinate >= collection[len(collection) - 1]:
             return -1
