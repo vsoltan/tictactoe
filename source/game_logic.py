@@ -7,7 +7,7 @@ from graphics import Point, Text
 
 from graphics_board import graphics_board
 
-# version 1.5
+# version 2.0
 # author vsoltan
 
 """"framework for a basic tic tac toe game"""
@@ -62,6 +62,8 @@ class tic_tac_game:
     def play_game(self):
         """game logic, alternating players choosing spaces on the board to fill with their respective tokens"""
 
+        self.visual_board.draw_menu_single_or_multiplayer()
+
         is_over = False
 
         while not is_over and self.num_turns != self.size ** 2:
@@ -80,6 +82,7 @@ class tic_tac_game:
 
                 # move_row, move_col = map(int, input(self.player_dict[self.curr_turn] +
                 #                                     " make your move: input row and column").split())
+                # manual testing
 
                 if self.board[move_row][move_col] == '':
                     break
@@ -100,7 +103,7 @@ class tic_tac_game:
             token_player.draw(self.visual_board.win)
 
             # adding rendering of token to list of all drawn objects
-            self.visual_board.tokensDrawn.append(token_player)
+            self.visual_board.tokens_drawn.append(token_player)
 
             # increase the number of tokens
             self.num_turns += 1
