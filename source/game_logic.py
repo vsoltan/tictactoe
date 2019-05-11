@@ -7,7 +7,7 @@ from graphics import Point, Text
 
 from graphics_board import graphics_board
 
-# version 2.0
+# version 2.1
 # author vsoltan
 
 """"framework for a basic tic tac toe game"""
@@ -45,6 +45,53 @@ class tic_tac_game:
 
         self.num_turns = 0
 
+    # board functions
+    def print_board(self):
+        print(self.board)
+
+    def check_rows(self):
+        for i in range(0, self.size):
+            consecutive_tokens = 0
+            for j in range(0, self.size):
+                if self.board[i][j] == self.token_dict[self.curr_turn]:
+                    consecutive_tokens += 1
+            if consecutive_tokens == self.size:
+                return True
+        return False
+
+    def check_columns(self):
+        for i in range(0, self.size):
+            consecutive_tokens = 0
+            for j in range(0, self.size):
+                if self.board[j][i] == self.token_dict[self.curr_turn]:
+                    consecutive_tokens += 1
+            if consecutive_tokens == self.size:
+                return True
+        return False
+
+    def check_diagonals(self):
+        diag = np.diag(self.board)
+        other_diag = np.diag(np.fliplr(self.board))
+
+        consecutive_tokens = 1
+        """initialized to 1 due to comparison-based iteration 
+                ex: a = b = c -> comparing a, b, c -> (a,b) and (b,c)
+                    2 comparisons for 3 consecutive tokens"""
+
+        for i in range(0, len(diag) - 1):
+            if diag[i] == diag[i + 1]:
+                consecutive_tokens += 1
+            if consecutive_tokens == self.size:
+                return True
+        else:
+            consecutive_tokens = 1
+        for i in range(0, len(other_diag) - 1):
+            if other_diag[i] == other_diag[i + 1]:
+                consecutive_tokens += 1
+            if consecutive_tokens == self.size:
+                return True
+        return False
+
     def game_over(self):
         """checks whether the game is complete, win or draw"""
 
@@ -59,11 +106,7 @@ class tic_tac_game:
 
         return False
 
-    def play_game(self):
-        """game logic, alternating players choosing spaces on the board to fill with their respective tokens"""
-
-        self.visual_board.draw_menu_single_or_multiplayer()
-
+    def multiplayer(self):
         is_over = False
 
         while not is_over and self.num_turns != self.size ** 2:
@@ -122,18 +165,26 @@ class tic_tac_game:
             print(self.player_dict[-1 * self.curr_turn] + " wins!")
             self.score[-1 * self.curr_turn] += 1
 
+    """"""
+
+    def singleplayer(self):
+        return 0
+
+    def replay(self):
+        # possible text inputs to continue or terminate game
         choices = ['y', 'n']
 
         # temp user validation (could be another character)
         while True:
-            # play again?
             cont = input("play again (y/n)?").strip()
 
+            # user input validation
             if cont in choices:
                 break
             else:
                 print("not a valid input")
 
+        # clears the existing board and starts a new game
         if cont == 'y':
             self.visual_board.undraw_all()
             is_over = False
@@ -146,52 +197,22 @@ class tic_tac_game:
             self.visual_board.win.close()
             return
 
-    # board functions
-    def print_board(self):
-        print(self.board)
+    def play_game(self):
+        """game logic, alternating players choosing spaces on the board to fill with their respective tokens"""
 
-    def check_rows(self):
-        for i in range(0, self.size):
-            consecutive_tokens = 0
-            for j in range(0, self.size):
-                if self.board[i][j] == self.token_dict[self.curr_turn]:
-                    consecutive_tokens += 1
-            if consecutive_tokens == self.size:
-                return True
-        return False
+        # draws option menu
+        self.visual_board.draw_menu_single_or_multiplayer()
 
-    def check_columns(self):
-        for i in range(0, self.size):
-            consecutive_tokens = 0
-            for j in range(0, self.size):
-                if self.board[j][i] == self.token_dict[self.curr_turn]:
-                    consecutive_tokens += 1
-            if consecutive_tokens == self.size:
-                return True
-        return False
+        # draws game board
+        self.visual_board.draw_game_board()
 
-    def check_diagonals(self):
-        diag = np.diag(self.board)
-        other_diag = np.diag(np.fliplr(self.board))
-
-        consecutive_tokens = 1
-        """initialized to 1 due to comparison-based iteration 
-                ex: a = b = c -> comparing a, b, c -> (a,b) and (b,c)
-                    2 comparisons for 3 consecutive tokens"""
-
-        for i in range(0, len(diag) - 1):
-            if diag[i] == diag[i + 1]:
-                consecutive_tokens += 1
-            if consecutive_tokens == self.size:
-                return True
+        # determines game mode
+        if self.visual_board.game_mode is 0:
+            self.singleplayer()
         else:
-            consecutive_tokens = 1
-        for i in range(0, len(other_diag) - 1):
-            if other_diag[i] == other_diag[i + 1]:
-                consecutive_tokens += 1
-            if consecutive_tokens == self.size:
-                return True
-        return False
+            self.multiplayer()
+
+        self.replay()
 
 
 if __name__ == "__main__":

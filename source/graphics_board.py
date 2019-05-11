@@ -5,7 +5,6 @@ class graphics_board:
 
     def __init__(self, board_size):
         """
-
         :rtype: object
 
         initializes the board based on the parameters passed from the game obj
@@ -17,6 +16,7 @@ class graphics_board:
         self.win.setBackground(color_rgb(0, 0, 0))
         self.board_size = board_size
         self.tokens_drawn = []
+        self.structs = []
         self.limits = [self.size / self.board_size]
         self.game_mode = 0
 
@@ -28,39 +28,56 @@ class graphics_board:
         welcome = Text(Point(250, 62.5), "Tic Tac Toe")
         welcome.setSize(32)
         welcome.setFill('white')
+        self.structs.append(welcome)
         welcome.draw(self.win)
 
         # mode choices / quit
 
-        single_player = Rectangle(Point(25, 200), Point(200, 300))
+        singleplayer = Rectangle(Point(25, 200), Point(200, 300))
         sp_text = Text(Point(112.5, 250), "SINGLEPLAYER")
         sp_text.setFill('white')
         sp_text.draw(self.win)
-        single_player.setOutline("white")
+        singleplayer.setOutline("white")
+        self.structs.append(sp_text)
+        self.structs.append(singleplayer)
 
         multiplayer = Rectangle(Point(300, 200), Point(475, 300))
         mp_text = Text(Point(387.5, 250), "MULTIPLAYER")
         mp_text.setFill('white')
         mp_text.draw(self.win)
         multiplayer.setOutline("white")
+        self.structs.append(mp_text)
+        self.structs.append(multiplayer)
 
         quit_button = Rectangle(Point(25, 400), Point(115, 475))
         quit_text = Text(Point(70, 437.5), "QUIT")
         quit_text.setFill('white')
         quit_button.setFill("red")
+        self.structs.append(quit_button)
+        self.structs.append(quit_text)
 
-        single_player.draw(self.win)
+        singleplayer.draw(self.win)
         multiplayer.draw(self.win)
         quit_button.draw(self.win)
         quit_text.draw(self.win)
 
         while True:
+            # listens to a mouse click in the areas encompassed by buttons
             click_point = self.win.getMouse()
 
-            if self.inside(click_point, single_player):
+            # modifies the game board structure accordingly
+            if self.inside(click_point, singleplayer):
                 self.game_mode = 0
+                self.erase_board()
+                self.draw_game_board()
+                return
+
             elif self.inside(click_point, multiplayer):
                 self.game_mode = 1
+                self.erase_board()
+                self.draw_game_board()
+                return
+
             elif self.inside(click_point, quit_button):
                 self.win.close()
 
@@ -103,10 +120,15 @@ class graphics_board:
             horizontal_bound.draw(self.win)
             vertical_bound.draw(self.win)
 
-    def undraw_all(self):
+    def erase_tokens(self):
         for token in self.tokens_drawn:
             token.undraw()
 
+    def erase_board(self):
+        for i in self.structs:
+            i.undraw()
+
+    # maps a mouse click to an index in the game board
     @staticmethod
     def from_point_to_index(collection, coordinate):
 
