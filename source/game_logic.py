@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 
 import random as r
-
 import numpy as np
-from graphics import Point, Text
+import tkinter as tk
 
+from graphics import *
 from graphics_board import graphics_board
 
-# version 2.1
+# version 2.2
 # author vsoltan
 
 """"framework for a basic tic tac toe game"""
@@ -106,6 +106,14 @@ class tic_tac_game:
 
         return False
 
+    def result(self, is_over):
+        # if board is full but game is not over, result is a draw
+        if self.num_turns == self.size ** 2 and not is_over:
+            print("game is a draw!")
+        else:
+            print(self.player_dict[-1 * self.curr_turn] + " wins!")
+            self.score[-1 * self.curr_turn] += 1
+
     def multiplayer(self):
         is_over = False
 
@@ -159,14 +167,9 @@ class tic_tac_game:
             # repaint board
             self.print_board()
 
-        if self.num_turns == self.size ** 2 and not is_over:  ## if board is full but game is not over -> draw
-            print("game is a draw!")
-        else:
-            print(self.player_dict[-1 * self.curr_turn] + " wins!")
-            self.score[-1 * self.curr_turn] += 1
+            self.result(is_over)
 
-    """"""
-
+    """AI based game logic"""
     def singleplayer(self):
         return 0
 
